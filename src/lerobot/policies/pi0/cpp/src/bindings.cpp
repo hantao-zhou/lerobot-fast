@@ -2,6 +2,7 @@
 #include <pybind11/stl.h>
 #include <torch/torch.h>
 #include "pi0/pi0.h"
+#include "pi0/model.h"
 
 namespace py = pybind11;
 
@@ -17,6 +18,17 @@ PYBIND11_MODULE(pi0_cpp, m) {
     py::class_<lerobot::pi0::Pi0, std::shared_ptr<lerobot::pi0::Pi0>, torch::nn::Module>(m, "Pi0")
         .def(py::init<const lerobot::pi0::Config&>())
         .def("forward", &lerobot::pi0::Pi0::forward);
+
+    py::class_<lerobot::pi0::ModelConfig>(m, "ModelConfig")
+        .def(py::init<>())
+        .def_readwrite("vocab_size", &lerobot::pi0::ModelConfig::vocab_size)
+        .def_readwrite("embed_dim", &lerobot::pi0::ModelConfig::embed_dim)
+        .def_readwrite("num_heads", &lerobot::pi0::ModelConfig::num_heads)
+        .def_readwrite("hidden_dim", &lerobot::pi0::ModelConfig::hidden_dim);
+
+    py::class_<lerobot::pi0::Pi0Model, std::shared_ptr<lerobot::pi0::Pi0Model>, torch::nn::Module>(m, "Pi0Model")
+        .def(py::init<const lerobot::pi0::ModelConfig&>())
+        .def("forward", &lerobot::pi0::Pi0Model::forward);
 
     m.def("create_pi0", &lerobot::pi0::create_pi0, py::arg("cfg"));
 }
