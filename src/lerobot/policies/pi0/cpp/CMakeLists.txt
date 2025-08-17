@@ -9,6 +9,7 @@ find_package(pybind11 CONFIG REQUIRED)
 
 add_library(pi0 STATIC
     src/pi0.cpp
+    src/model.cpp
 )
 
 target_include_directories(pi0 PUBLIC include)
